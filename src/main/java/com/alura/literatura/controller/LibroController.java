@@ -6,6 +6,7 @@ import com.alura.literatura.service.GutendexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 @RestController
@@ -18,61 +19,91 @@ public class LibroController {
     @Autowired
     private GutendexService gutendexService;
 
+    // Crear un nuevo libro
+    @PostMapping
+    public String crearLibro(@RequestBody Libro libro) {
+        System.out.println("Intentando registrar el libro: " + libro.getTitulo());
+
+        // Verificar si el libro ya existe
+        List<Libro> existentes = libroRepository.findByTitulo(libro.getTitulo());
+        if (!existentes.isEmpty()) {
+            String mensaje = "No se puede registrar el libro \"" + libro.getTitulo() + "\" más de una vez.";
+            System.out.println(mensaje); // Mostrar mensaje en la consola
+            return mensaje;
+        }
+
+        // Guardar el libro si no existe
+        libroRepository.save(libro);
+        String mensajeExito = "Libro registrado exitosamente: " + libro;
+        System.out.println(mensajeExito); // Mostrar mensaje en la consola
+        return mensajeExito;
+    }
+
     // Obtener todos los libros
     @GetMapping
-    public List<Libro> obtenerLibros(){
+    public List<Libro> obtenerLibros() {
         return libroRepository.findAll();
     }
 
-    // Crer un nuevo libro
-    @PostMapping
-    public Libro crearLibro(@RequestBody Libro libro){
-        return libroRepository.save(libro);
-    }
-
-    // Obteber un libro por ID
+    // Obtener un libro por ID
     @GetMapping("/{id}")
-    public Libro obtenerLibroPorId(@PathVariable Long id){
+    public Libro obtenerLibroPorId(@PathVariable Long id) {
         return libroRepository.findById(id).orElse(null);
     }
 
     // Eliminar un libro por ID
     @DeleteMapping("/{id}")
-    public void eliminarLibro(@PathVariable Long id){
+    public void eliminarLibro(@PathVariable Long id) {
         libroRepository.deleteById(id);
     }
 
-    // buscar y guardar un Libro por titulo desde la API Gutendex
+    // Buscar y guardar un libro por título desde la API Gutendex
     @GetMapping("/buscar")
-    public Libro buscarYGuardarLibro(@RequestParam String titulo){
-        try {
-            // Buscar Libro en API
-            Libro libro = gutendexService.buscarLibroPorTitulo(titulo);
+    public String buscarYGuardarLibro(@RequestParam String titulo) {
+        System.out.println("Buscando y registrando libro: " + titulo);
 
-            // Guardar Libro en la base de datos
-            libroRepository.save(libro);
-
-            return libro;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al encontrar el libro: "+ e.getMessage());
+        // Verificar si el libro ya existe
+        List<Libro> existentes = libroRepository.findByTitulo(titulo);
+        if (!existentes.isEmpty()) {
+            String mensaje = "No se puede registrar el libro \"" + titulo + "\" más de una vez.";
+            System.out.println(mensaje); // Mostrar mensaje en la consola
+            return mensaje;
         }
+
+        // Buscar el libro en la API de Gutendex y guardarlo
+        Libro libro = gutendexService.buscarLibroPorTitulo(titulo);
+        libroRepository.save(libro);
+        String mensajeExito = "Libro registrado exitosamente: " + libro;
+        System.out.println(mensajeExito); // Mostrar mensaje en la consola
+        return mensajeExito;
     }
 
-    //Encontrar libros por idioma
+    // Encontrar libros por idioma
     @GetMapping("/idioma")
-    public List<Libro> obtenerLibrosPorIdioma(@RequestParam String idioma){
+    public List<Libro> obtenerLibrosPorIdioma(@RequestParam String idioma) {
         return libroRepository.findByIdioma(idioma);
     }
 
     // Calcular total y promedio de descargas
     @GetMapping("/estadisticas/descargas")
-    public String obtenerEstadisticasDeDescargas(){
+    public String obtenerEstadisticasDeDescargas() {
         List<Libro> libros = libroRepository.findAll();
 
-        //Calcula total y promedio de descarggas
+        // Calcular total y promedio de descargas
         int totalDescargas = libros.stream().mapToInt(Libro::getDescargas).sum();
         double promedioDescargas = libros.stream().mapToInt(Libro::getDescargas).average().orElse(0);
 
-        return "Total de descargas: " + totalDescargas + ", promedio de descargas: " +promedioDescargas;
+        return "Total de descargas: " + totalDescargas + ", promedio de descargas: " + promedioDescargas;
+    }
+
+    // Estadísticas avanzadas de descargas
+    @GetMapping("/estadisticas/avanzadas")
+    public DoubleSummaryStatistics obtenerEstadisticasAvanzadas() {
+        List<Libro> libros = libroRepository.findAll();
+
+        return libros.stream()
+                .mapToDouble(Libro::getDescargas)
+                .summaryStatistics();
     }
 }
+

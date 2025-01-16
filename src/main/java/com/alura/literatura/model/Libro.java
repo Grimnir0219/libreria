@@ -9,6 +9,7 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true) // Añadir restricción de unicidad
     private String titulo;
     private String idioma;
     private Integer descargas;
@@ -66,5 +67,15 @@ public class Libro {
 
     public void setAutor(Autor autor) {
         this.autor = autor;
+    }
+
+    @Override
+    public String toString() {
+        return "\n----- LIBRO -----\n" +
+                "Titulo: " + titulo + "\n" +
+                "Idioma: " + idioma + "\n" +
+                "Descargas: " + descargas + "\n" +
+                "Autor: " + (autor != null ? autor.getNombre() : "Desconocido") + "\n" +
+                "------------------";
     }
 }
