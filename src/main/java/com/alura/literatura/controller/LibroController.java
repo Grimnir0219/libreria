@@ -36,7 +36,6 @@ public class LibroController {
         System.out.println("Libro registrado exitosamente: " + libro);
     }
 
-
     // Obtener todos los libros
     @GetMapping
     public List<Libro> obtenerLibros() {
@@ -48,12 +47,6 @@ public class LibroController {
     public Libro obtenerLibroPorId(@PathVariable Long id) {
         return libroRepository.findById(id).orElse(null);
     }
-
-//    // Eliminar un libro por ID
-//    @DeleteMapping("/{id}")
-//    public void eliminarLibro(@PathVariable Long id) {
-//        libroRepository.deleteById(id);
-//    }
 
     // Buscar y guardar un libro por título desde la API Gutendex
     @GetMapping("/buscar")

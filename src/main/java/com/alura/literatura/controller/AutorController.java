@@ -25,7 +25,7 @@ public class AutorController {
         return autorRepository.findAll();
     }
 
-    // Obtener todos los autores (endpoint para pruebas)
+    // Obtener todos los autores
     @GetMapping("/todos-test")
     public List<Autor> testTodos() {
         return autorRepository.findAll();

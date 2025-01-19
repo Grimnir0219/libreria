@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public Map<String, Object> manejarRuntimeException(RuntimeException ex) {
-        System.out.println("Excepción capturada: " + ex.getMessage()); // Imprimir mensaje en consola
+        System.out.println("Excepción capturada: " + ex.getMessage());
         Map<String, Object> response = new HashMap<>();
         response.put("mensaje", ex.getMessage());
         response.put("estado", HttpStatus.BAD_REQUEST.value());

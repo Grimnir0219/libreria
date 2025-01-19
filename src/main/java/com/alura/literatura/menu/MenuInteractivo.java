@@ -49,7 +49,7 @@ public class MenuInteractivo implements CommandLineRunner {
                 }
 
                 int opcion = scanner.nextInt();
-                scanner.nextLine(); // Limpiar el buffer
+                scanner.nextLine();
 
                 switch (opcion) {
                     case 1:
@@ -161,6 +161,7 @@ public class MenuInteractivo implements CommandLineRunner {
         }
     }
 
+    //Obtener autores por fe año en que están o estuvieron vivos
     private void listarAutoresVivos(Scanner scanner) {
         System.out.print("Ingrese el año para buscar autores vivos: ");
         if (!scanner.hasNextInt()) {
@@ -226,7 +227,7 @@ public class MenuInteractivo implements CommandLineRunner {
         }
     }
 
-
+    // Mostrar 10 libros más descargados de la base de datos.
     private void mostrarTop10Libros() {
         System.out.println("Top 10 libros más descargados:");
         List<Libro> top10Libros = libroRepository.findTop10ByOrderByDescargasDesc();
