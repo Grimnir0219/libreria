@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface AutorRepository extends JpaRepository<Autor, Long> {
 
+    List<Autor> findByNombre(String nombre);
+
     // Filtrar autores por años en los cuales estaban vivos
     @Query("SELECT a FROM Autor a WHERE a.anioNacimiento <= :anio AND (a.anioFallecimiento IS NULL OR a.anioFallecimiento >= :anio)")
     List<Autor> findAutoresVivosEnAnio(@Param("anio") int anio);

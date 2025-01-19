@@ -1,9 +1,6 @@
 package com.alura.literatura.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Autor {
@@ -13,20 +10,20 @@ public class Autor {
     private Long id;
 
     private String nombre;
+    @Column(name = "anio_nacimiento") // Asegurar coincidencia con la base de datos
     private Integer anioNacimiento;
+
+    @Column(name = "anio_fallecimiento") // Asegurar coincidencia con la base de datos
     private Integer anioFallecimiento;
 
-    // Constructor vacío
     public Autor() {}
 
-    // Constructor completo
     public Autor(String nombre, Integer anioNacimiento, Integer anioFallecimiento) {
         this.nombre = nombre;
         this.anioNacimiento = anioNacimiento;
         this.anioFallecimiento = anioFallecimiento;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

@@ -9,18 +9,15 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true) // Añadir restricción de unicidad
     private String titulo;
     private String idioma;
     private Integer descargas;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL) // Relación con la tabla Autor
     private Autor autor;
 
-    // Constructor vacío
     public Libro() {}
 
-    // Constructor completo
     public Libro(String titulo, String idioma, Integer descargas, Autor autor) {
         this.titulo = titulo;
         this.idioma = idioma;
@@ -28,7 +25,6 @@ public class Libro {
         this.autor = autor;
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -79,3 +75,4 @@ public class Libro {
                 "------------------";
     }
 }
+

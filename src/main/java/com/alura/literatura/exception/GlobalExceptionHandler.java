@@ -11,7 +11,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    public  Map<String, Object> manejarRuntimeException(RuntimeException ex){
+    public Map<String, Object> manejarRuntimeException(RuntimeException ex) {
+        System.out.println("Excepción capturada: " + ex.getMessage()); // Imprimir mensaje en consola
         Map<String, Object> response = new HashMap<>();
         response.put("mensaje", ex.getMessage());
         response.put("estado", HttpStatus.BAD_REQUEST.value());
@@ -19,6 +20,10 @@ public class GlobalExceptionHandler {
         return response;
     }
 
-
-
+    @ExceptionHandler(LibroDuplicadoException.class)
+    public void manejarLibroDuplicadoException(LibroDuplicadoException ex) {
+        // Imprimir mensaje en la consola
+        System.out.println(ex.getMessage());
+    }
 }
+
